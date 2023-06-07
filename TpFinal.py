@@ -29,12 +29,13 @@ class ProgramaPrincipal:
 
                 nuevo_libro.cargar_libro()
 
-            if nro == 2:
+            elif nro == 2:
                 ID_ingresado = input("Por favor ingrese el ID del libro: ")
                 precio = input("Por favor ingrese el nuevo precio: ")
                 libro_a_modificar = Libro(ID_ingresado, precio)
                 libro_a_modificar.modificar_libro(ID_ingresado)
-            if nro == 0:
+            elif nro == 0:
+                # conexion.cerrarConexion()
                 break
 
     def crearTablas(self):
@@ -42,17 +43,13 @@ class ProgramaPrincipal:
         conexion.abrirConexion()
         conexion.miCursor.execute("DROP TABLE IF EXISTS LIBROS")
         conexion.miCursor.execute(
-            "CREATE TABLE LIBROS (ID INTEGER PRIMARY KEY , ISBN INTEGER, titulo  VARCHAR(30) ,autor  VARCHAR(30), genero VARCHAR(30), precio FLOAT NOT NULL, cantidadDisponibles INTEGER NOT NULL, fechaUltimoPrecio INTEGER)")
+            "CREATE TABLE LIBROS (ID INTEGER identity(1, 2) PRIMARY KEY , ISBN INTEGER, titulo  VARCHAR(30) ,autor  VARCHAR(30), genero VARCHAR(30), precio FLOAT NOT NULL, cantidadDisponibles INTEGER NOT NULL, fechaUltimoPrecio INTEGER)")
         conexion.miConexion.commit()
         conexion.cerrarConexion()
 
 
 class Libro:
-    ID = 0
-
-    def __init__(self, ID, ISBN, titulo, autor, genero, precio, fechaUltimoPrecio, cantDisponible=None):
-        Libro.ID += 1
-        self.ID = Libro.ID
+    def __init__(self, ISBN, titulo, autor, genero, precio, fechaUltimoPrecio, cantDisponible=None):
         self.ISBN = ISBN
         self.titulo = titulo
         self.autor = autor
@@ -65,8 +62,8 @@ class Libro:
         conexion = Conexiones()
         conexion.abrirConexion()
         try:
-            conexion.miCursor.execute("INSERT INTO LIBROS(ID,ISBN, titulo, autor, genero, precio, fechaUltimoPrecio, cantDisponible) VALUES('{}','{}', '{}','{}','{}','{}','{}','{}')".format(
-                self.ID, self.ISBN, self.titulo, self.autor, self.genero, self.precio, self.fechaUltimoPrecio, self.cantDisponible))
+            conexion.miCursor.execute("INSERT INTO LIBROS(ISBN, titulo, autor, genero, precio, fechaUltimoPrecio, cantDisponible) VALUES('{}','{}', '{}','{}','{}','{}','{}','{}')".format(
+                self.ISBN, self.titulo, self.autor, self.genero, self.precio, self.fechaUltimoPrecio, self.cantDisponible))
             conexion.miConexion.commit()
             print("Libro cargado exitosamente")
         except:
