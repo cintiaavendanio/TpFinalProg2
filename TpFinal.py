@@ -8,7 +8,6 @@ class ProgramaPrincipal:
             print("probando")
             print("soy joaco")
             print("Soy Mateo")
-            print("Hoy pierde riber")
             print("Menu de opciones Buscalibre")
             print("1 - Cargar Libros")
             print("2 - Modificar precio de un libro")
