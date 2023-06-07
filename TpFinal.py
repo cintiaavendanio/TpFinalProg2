@@ -6,7 +6,6 @@ class Libreria:
         self.conexion = Conexiones()
         self.conexion.abrirConexion()
         self.conexion.miCursor.execute("DROP TABLE IF EXISTS LIBROS")
-        ISBN, titulo, autor, genero, precio, fechaUltimoPrecio, cantDisponible
         self.conexion.miCursor.execute(
             "CREATE TABLE LIBROS (id_libro INTEGER PRIMARY KEY,ISBN INTEGER, titulo VARCHAR(30), autor VARCHAR(30), genero VARCHAR(30), precio FLOAT NOT NULL, fechaUltimoPrecio INTEGER, cantDisponibles INTEGER NOT NULL, UNIQUE(titulo, autor))"
         )
