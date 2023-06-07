@@ -4,10 +4,6 @@ import sqlite3
 class ProgramaPrincipal:
     def menu(self):
         while True:
-            print("probando")
-            print("soy joaco")
-            print("Soy Mateo")
-            print("Hi")
             print("Menu de opciones Buscalibre")
             print("1 - Cargar Libros")
             print("2 - Modificar precio de un libro")
