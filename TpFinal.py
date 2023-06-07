@@ -11,11 +11,21 @@ class Libreria:
         )
         self.conexion.miConexion.commit()
 
-    def agregar_libro(self, titulo, autor, precio, cantidadDisponibles):
+    def agregar_libro(
+        self, ISBN, titulo, autor, genero, precio, fechaUltimoPrecio, cantDisponibles
+    ):
         try:
             self.conexion.miCursor.execute(
                 "INSERT INTO LIBROS (ISBN, titulo, autor, genero, precio,fechaUltimoPrecio, cantDisponibles) VALUES (?, ?, ?, ?, ?, ?,?)",
-                (titulo, autor, precio, cantidadDisponibles),
+                (
+                    ISBN,
+                    titulo,
+                    autor,
+                    genero,
+                    precio,
+                    fechaUltimoPrecio,
+                    cantDisponibles,
+                ),
             )
             self.conexion.miConexion.commit()
             print("Libro agregado exitosamente")
