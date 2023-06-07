@@ -2,12 +2,12 @@ import sqlite3
 
 
 class ProgramaPrincipal:
-
     def menu(self):
         while True:
             print("probando")
             print("soy joaco")
             print("Soy Mateo")
+            print("probando si se rompe")
             print("Menu de opciones Buscalibre")
             print("1 - Cargar Libros")
             print("2 - Modificar precio de un libro")
@@ -23,12 +23,21 @@ class ProgramaPrincipal:
                 genero = input("Por favor ingrese el genero del libro: ")
                 precio = input("Por favor ingrese el precio del libro: ")
                 fechaUltimoPrecio = input(
-                    "Por favor ingrese la fecha de ultimo precio: ")
+                    "Por favor ingrese la fecha de ultimo precio: "
+                )
                 cantDisponible = input(
-                    "Por favor ingrese la cantidad de unidades disponibles: ")
+                    "Por favor ingrese la cantidad de unidades disponibles: "
+                )
 
                 nuevo_libro = Libro(
-                    ISBN, titulo, autor, genero, precio, fechaUltimoPrecio, cantDisponible)
+                    ISBN,
+                    titulo,
+                    autor,
+                    genero,
+                    precio,
+                    fechaUltimoPrecio,
+                    cantDisponible,
+                )
 
                 nuevo_libro.cargar_libro()
 
@@ -46,13 +55,23 @@ class ProgramaPrincipal:
         conexion.abrirConexion()
         conexion.miCursor.execute("DROP TABLE IF EXISTS LIBROS")
         conexion.miCursor.execute(
-            "CREATE TABLE LIBROS (ID INTEGER identity(1, 2) PRIMARY KEY , ISBN INTEGER, titulo  VARCHAR(30) ,autor  VARCHAR(30), genero VARCHAR(30), precio FLOAT NOT NULL, cantidadDisponibles INTEGER NOT NULL, fechaUltimoPrecio INTEGER)")
+            "CREATE TABLE LIBROS (ID INTEGER identity(1, 2) PRIMARY KEY , ISBN INTEGER, titulo  VARCHAR(30) ,autor  VARCHAR(30), genero VARCHAR(30), precio FLOAT NOT NULL, cantidadDisponibles INTEGER NOT NULL, fechaUltimoPrecio INTEGER)"
+        )
         conexion.miConexion.commit()
         conexion.cerrarConexion()
 
 
 class Libro:
-    def __init__(self, ISBN, titulo, autor, genero, precio, fechaUltimoPrecio, cantDisponible=None):
+    def __init__(
+        self,
+        ISBN,
+        titulo,
+        autor,
+        genero,
+        precio,
+        fechaUltimoPrecio,
+        cantDisponible=None,
+    ):
         self.ISBN = ISBN
         self.titulo = titulo
         self.autor = autor
@@ -65,8 +84,17 @@ class Libro:
         conexion = Conexiones()
         conexion.abrirConexion()
         try:
-            conexion.miCursor.execute("INSERT INTO LIBROS(ISBN, titulo, autor, genero, precio, fechaUltimoPrecio, cantDisponible) VALUES('{}','{}', '{}','{}','{}','{}','{}','{}')".format(
-                self.ISBN, self.titulo, self.autor, self.genero, self.precio, self.fechaUltimoPrecio, self.cantDisponible))
+            conexion.miCursor.execute(
+                "INSERT INTO LIBROS(ISBN, titulo, autor, genero, precio, fechaUltimoPrecio, cantDisponible) VALUES('{}','{}', '{}','{}','{}','{}','{}','{}')".format(
+                    self.ISBN,
+                    self.titulo,
+                    self.autor,
+                    self.genero,
+                    self.precio,
+                    self.fechaUltimoPrecio,
+                    self.cantDisponible,
+                )
+            )
             conexion.miConexion.commit()
             print("Libro cargado exitosamente")
         except:
@@ -79,18 +107,20 @@ class Libro:
         conexion.abrirConexion()
 
         try:
-            conexion.miCursor.execute("UPDATE LIBROS SET precio='{}' where ID='{}'".format(
-                self.precio, ID_ingresado))
+            conexion.miCursor.execute(
+                "UPDATE LIBROS SET precio='{}' where ID='{}'".format(
+                    self.precio, ID_ingresado
+                )
+            )
             conexion.miConexion.commit()
             print("Libro modificado correctamente")
         except:
-            print('Error al actualizar el libro')
+            print("Error al actualizar el libro")
         finally:
             conexion.cerrarConexion()
 
 
 class Conexiones:
-
     def abrirConexion(self):
         self.miConexion = sqlite3.connect("Libreria")
         self.miCursor = self.miConexion.cursor()
