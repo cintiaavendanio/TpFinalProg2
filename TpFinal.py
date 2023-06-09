@@ -43,6 +43,7 @@ class Libreria:
         except:
             print("Error al modificar un libro")
 
+
     def cerrar_libreria(self):
         self.conexion.cerrarConexion()
 
@@ -89,9 +90,11 @@ while True:
         nuevo_precio = input("Por favor ingrese el nuevo precio: ")
         # libro_a_modificar.modificar_libro(self,ISBN_ingresado,precio)
         # libro_a_modificar = libreria(ISBN_ingresado, precio)
-        Libreria.modificar_libro(ISBN_ingresado, nuevo_precio)
+        libreria.modificar_libro(ISBN_ingresado, nuevo_precio)
 
         break
+
+    # elif nro ==3:
         # elif nro == 0:
         # conexion.cerrarConexion()
         # break
