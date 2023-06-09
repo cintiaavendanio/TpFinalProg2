@@ -43,8 +43,41 @@ class Libreria:
         except:
             print("Error al modificar un libro")
 
+    def borrar_libro(self, ISBN_ingresado):
+        try:
+            self.conexion.miCursor.execute(
+                "DELETE FROM LIBROS WHERE ISBN = ?",
+                (ISBN_ingresado,),
+            )
+            self.conexion.miConexion.commit()
+            print("Libro borrado correctamente")
+        except:
+            print("Error al borrar libro")
 
-    def cerrar_libreria(self):
+    def modificar_disponibilidad(self, ISBN_ingresado, nueva_disponibilidad): #el orden de los factores SI altera el prducto
+        try:
+            self.conexion.miCursor.execute(
+                "UPDATE LIBROS SET cantDisponibles = ? WHERE ISBN = ?",
+                (nueva_disponibilidad, ISBN_ingresado),
+            )
+            self.conexion.miConexion.commit()
+            print("Cantidad modificada correctamente")
+        except:
+            print("Error al modificar la cantidad de libros disponibles")
+
+    def mostrar_libros(self):
+        try:
+            cursor=self.conexion.miCursor.execute("SELECT ISBN, titulo, autor FROM LIBROS")
+            for fila in cursor:
+                print("ISBN:", fila[0])
+                print("Título:", fila[1])
+                print("Autor:", fila[2])
+                print("---")
+        except:
+            print("Error al mostrar libros")
+
+
+    def cerrar_libreria(self, ISBN_ingresado, nueva_disponibilidad):
         self.conexion.cerrarConexion()
 
 
@@ -88,13 +121,29 @@ while True:
     elif nro == 2:
         ISBN_ingresado = input("Por favor ingrese el ISBN del libro: ")
         nuevo_precio = input("Por favor ingrese el nuevo precio: ")
-        # libro_a_modificar.modificar_libro(self,ISBN_ingresado,precio)
-        # libro_a_modificar = libreria(ISBN_ingresado, precio)
         libreria.modificar_libro(ISBN_ingresado, nuevo_precio)
 
         break
 
-    # elif nro ==3:
+    elif nro == 3:
+        ISBN_ingresado = input("Por favor ingrese el ISBN del libro: ")
+        libreria.borrar_libro(ISBN_ingresado)
+
+        break
+
+    elif nro == 4:
+        ISBN_ingresado = input("Por favor ingrese el ISBN del libro: ")
+        nueva_disponibilidad = input("Por favor ingrese la nueva disponibilidad: ")
+        libreria.modificar_disponibilidad(ISBN_ingresado, nueva_disponibilidad)
+
+        break
+
+    elif nro == 5:
+        libreria.mostrar_libros()
+
+
+        break
+
         # elif nro == 0:
         # conexion.cerrarConexion()
         # break

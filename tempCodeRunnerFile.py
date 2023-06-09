@@ -1,2 +1,1 @@
-
-    # elif nro ==3:
+ARCHAR(
