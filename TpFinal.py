@@ -32,11 +32,11 @@ class Libreria:
         except:
             print("Error al agregar un libro")
 
-    def modificar_libro(self, titulo, autor, precio):
+    def modificar_libro(self, ISBN_ingresado, nuevo_precio):
         try:
             self.conexion.miCursor.execute(
-                "UPDATE LIBROS SET precio = ? WHERE titulo = ? AND autor = ?",
-                (precio, titulo, autor),
+                "UPDATE LIBROS SET precio = ? WHERE ISBN = ?",
+                (nuevo_precio, ISBN_ingresado),
             )
             self.conexion.miConexion.commit()
             print("Libro modificado correctamente")
@@ -82,12 +82,16 @@ while True:
         libreria.agregar_libro(
             ISBN, titulo, autor, genero, precio, fechaUltimoPrecio, cantDisponible
         )
+        
 
-        # elif nro == 2:
-        # ID_ingresado = input("Por favor ingrese el ID del libro: ")
-        # precio = input("Por favor ingrese el nuevo precio: ")
-        # libro_a_modificar = Libro(ID_ingresado, precio)
-        # libro_a_modificar.modificar_libro(ID_ingresado)
+    elif nro == 2:
+        ISBN_ingresado = input("Por favor ingrese el ISBN del libro: ")
+        nuevo_precio = input("Por favor ingrese el nuevo precio: ")
+        # libro_a_modificar.modificar_libro(self,ISBN_ingresado,precio)
+        # libro_a_modificar = libreria(ISBN_ingresado, precio)
+        Libreria.modificar_libro(ISBN_ingresado, nuevo_precio)
+
+        break
         # elif nro == 0:
         # conexion.cerrarConexion()
-        break
+        # break
