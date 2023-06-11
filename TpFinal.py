@@ -1,7 +1,20 @@
 import sqlite3
 
 
+class Conexiones:
+    def abrirConexion(self):
+        # se conecta con la base de datos:
+        self.miConexion = sqlite3.connect("Libreria.db")
+        # se crea el cursor:
+        self.miCursor = self.miConexion.cursor()
+
+    def cerrarConexion(self):
+        self.miConexion.close()
+
+
 class Libreria:
+    # Base de datos: Libreria
+    # Tabla: Libros
     def __init__(self):
         self.conexion = Conexiones()
         self.conexion.abrirConexion()
@@ -54,7 +67,9 @@ class Libreria:
         except:
             print("Error al borrar libro")
 
-    def modificar_disponibilidad(self, ISBN_ingresado, nueva_disponibilidad): #el orden de los factores SI altera el prducto
+    def modificar_disponibilidad(
+        self, ISBN_ingresado, nueva_disponibilidad
+    ):  # el orden de los factores SI altera el prducto
         try:
             self.conexion.miCursor.execute(
                 "UPDATE LIBROS SET cantDisponibles = ? WHERE ISBN = ?",
@@ -67,7 +82,9 @@ class Libreria:
 
     def mostrar_libros(self):
         try:
-            cursor=self.conexion.miCursor.execute("SELECT ISBN, titulo, autor FROM LIBROS")
+            cursor = self.conexion.miCursor.execute(
+                "SELECT ISBN, titulo, autor FROM LIBROS"
+            )
             for fila in cursor:
                 print("ISBN:", fila[0])
                 print("Título:", fila[1])
@@ -76,18 +93,8 @@ class Libreria:
         except:
             print("Error al mostrar libros")
 
-
-    def cerrar_libreria(self, ISBN_ingresado, nueva_disponibilidad):
+    def cerrar_libreria(self):
         self.conexion.cerrarConexion()
-
-
-class Conexiones:
-    def abrirConexion(self):
-        self.miConexion = sqlite3.connect("Libreria.db")
-        self.miCursor = self.miConexion.cursor()
-
-    def cerrarConexion(self):
-        self.miConexion.close()
 
 
 libreria = Libreria()
@@ -116,33 +123,23 @@ while True:
         libreria.agregar_libro(
             ISBN, titulo, autor, genero, precio, fechaUltimoPrecio, cantDisponible
         )
-        
 
     elif nro == 2:
         ISBN_ingresado = input("Por favor ingrese el ISBN del libro: ")
         nuevo_precio = input("Por favor ingrese el nuevo precio: ")
         libreria.modificar_libro(ISBN_ingresado, nuevo_precio)
 
-        break
-
     elif nro == 3:
         ISBN_ingresado = input("Por favor ingrese el ISBN del libro: ")
         libreria.borrar_libro(ISBN_ingresado)
-
-        break
 
     elif nro == 4:
         ISBN_ingresado = input("Por favor ingrese el ISBN del libro: ")
         nueva_disponibilidad = input("Por favor ingrese la nueva disponibilidad: ")
         libreria.modificar_disponibilidad(ISBN_ingresado, nueva_disponibilidad)
 
-        break
-
     elif nro == 5:
         libreria.mostrar_libros()
-
-
-        break
 
         # elif nro == 0:
         # conexion.cerrarConexion()
