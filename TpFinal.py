@@ -62,11 +62,48 @@ class ProgramaPrincipal:
             elif nro == 2:
                 id = input("Por favor ingrese el id del libro: ")
                 nuevo_precio = input("Por favor ingrese el nuevo precio: ")
-                libreria.modificar_libro(id, nuevo_precio)
+                bandera = True
+
+                while bandera == True:
+                    try:
+                        rta = input("¿Está seguro de que desea modificar el precio del libro? (S/N): ")
+                        if rta.lower() == "s":
+                            libreria.modificar_libro(id, nuevo_precio)
+
+                            bandera = False
+                        elif rta.lower() == "n":
+                            print("El libro no fue modificado")
+                            bandera = False
+
+                        else:
+                            print("No ingresó una opción valida")
+                            bandera = True
+                            
+                    except Exception as err:
+                        print("Error al modificar el libro")
+                        print(err)
 
             elif nro == 3:
                 id = input("Por favor ingrese el id del libro: ")
-                libreria.borrar_libro(id)
+                bandera = True
+
+                while bandera == True:
+                    try:
+                        rta = input("¿Está seguro de que desea eliminar el libro? (S/N): ")
+                        if rta.lower() == "s":
+                            libreria.borrar_libro(id)
+                            bandera = False
+                        elif rta.lower() == "n":
+                            print("El libro no fue eliminado")
+                            bandera = False
+                        else:
+                            print("No ingresó una opción valida")
+                            bandera = True
+                            
+                    except Exception as err:
+                        print("Error al eliminar el libro")
+                        print(err)
+
 
             elif nro == 4:
                 id = input("Por favor ingrese el id del libro: ")
@@ -90,8 +127,6 @@ class ProgramaPrincipal:
                     input("ingrese porcentaje de aumento (sin %)")
                 )
                 fechaActual = datetime.now()
-                print("fecha actual:")
-                print(fechaActual)
                 libreria.actualizarPrecios(fechaActual, porcentajeDeAumento)
 
             elif nro == 8:
@@ -298,14 +333,18 @@ class Libreria:
         conexion = Conexiones()
         conexion.abrirConexion()
         try:
-            consulta = "SELECT id_libro, ISBN, titulo, fechaUltimoPrecio FROM LIBROS WHERE fechaUltimoPrecio < ?"
-            cursor = conexion.miCursor.execute(consulta, (fecha,))
-            for fila in cursor:
-                print("id:", fila[0])
-                print("ISBN:", fila[1])
-                print("titulo:", fila[2])
-                print("fechaUltimoPrecio:", fila[3])
-                print("---")
+            registros = conexion.miCursor.execute("SELECT id_libro, ISBN, titulo, fechaUltimoPrecio FROM LIBROS WHERE fechaUltimoPrecio < ?", (fecha,))
+            
+            if registros:
+                print("Registros anteriores a la fecha límite:")
+                for registro in registros:
+                    print("ID:", registro[0])
+                    print("ISBN:", registro[1])
+                    print("Título:", registro[2])
+                    print("Fecha último precio:", registro[3])
+                    print("------------------------")
+            else:
+                print("No hay registros anteriores a la fecha límite.")
 
             conexion.miConexion.commit()
         except Exception as err:
@@ -314,7 +353,7 @@ class Libreria:
         finally:
             conexion.cerrarConexion()
 
-
+#Libreria y ProgramaPrincipal son clases con metodos. Creamos los objetos para acceder a estos metodos
 libreria = Libreria()
 programa = ProgramaPrincipal()
 programa.menu()
