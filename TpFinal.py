@@ -16,6 +16,7 @@ class Conexiones:
 class ProgramaPrincipal:
     def menu(self):
         while True:
+            print("")
             print("Menu de opciones Buscalibre")
             print("1 - Cargar Libros")
             print("2 - Modificar precio de un libro")
@@ -27,22 +28,24 @@ class ProgramaPrincipal:
             print("8 - Mostrar registro")
             print("99 - Crear tablas")
             print("0- Salir del menú")
+            
             try:
                 nro = int(input("Por favor ingrese la opción mediante su número: "))
+                print("")
             except ValueError:
                 print("Por favor ingrese un número válido.")
                 continue
 
             if nro == 1:
                 try:
-                    ISBN = int(input("Por favor ingrese el ISBN del libro: "))
-                    titulo = input("Por favor ingrese el titulo del libro: ")
-                    autor = input("Por favor ingrese el autor del libro: ")
-                    genero = input("Por favor ingrese el genero del libro: ")
-                    precio = float(input("Por favor ingrese el precio del libro: "))
+                    ISBN = int(input("Por favor, ingrese el ISBN del libro: "))
+                    titulo = input("Por favor, ingrese el titulo del libro: ")
+                    autor = input("Por favor, ingrese el autor del libro: ")
+                    genero = input("Por favor, ingrese el genero del libro: ")
+                    precio = float(input("Por favor, ingrese el precio del libro: "))
                     fechaUltimoPrecio = datetime.now()
                     cantDisponibles = int(
-                        input("Por favor ingrese la cantidad de unidades disponibles: ")
+                        input("Por favor, ingrese la cantidad de unidades disponibles: ")
                     )
 
                     libreria.agregar_libro(
@@ -60,8 +63,8 @@ class ProgramaPrincipal:
                     print(err)
 
             elif nro == 2:
-                id = input("Por favor ingrese el id del libro: ")
-                nuevo_precio = input("Por favor ingrese el nuevo precio: ")
+                id = input("Por favor, ingrese el ID del libro: ")
+                nuevo_precio = input("Por favor, ingrese el nuevo precio: ")
                 bandera = True
 
                 while bandera == True:
@@ -84,7 +87,7 @@ class ProgramaPrincipal:
                         print(err)
 
             elif nro == 3:
-                id = input("Por favor ingrese el id del libro: ")
+                id = input("Por favor, ingrese el ID del libro: ")
                 bandera = True
 
                 while bandera == True:
@@ -106,9 +109,9 @@ class ProgramaPrincipal:
 
 
             elif nro == 4:
-                id = input("Por favor ingrese el id del libro: ")
+                id = input("Por favor, ingrese el ID del libro: ")
                 nueva_disponibilidad = input(
-                    "Por favor ingrese la nueva disponibilidad: "
+                    "Por favor, ingrese la nueva disponibilidad: "
                 )
                 libreria.modificar_disponibilidad(id, nueva_disponibilidad)
 
@@ -116,21 +119,21 @@ class ProgramaPrincipal:
                 libreria.mostrar_libros()
 
             elif nro == 6:
-                id_libro = input("ingrese id del libro vendido")
-                cantVendidas = input("ingrese cantidades vendidas")
+                id_libro = input("Ingresar el ID del libro vendido: ")
+                cantVendidas = input("Ingrese las cantidades vendidas: ")
                 fecha = datetime.now()
 
                 libreria.registrar_venta(id_libro, cantVendidas, fecha)
 
             elif nro == 7:
                 porcentajeDeAumento = int(
-                    input("ingrese porcentaje de aumento (sin %)")
+                    input("Ingrese el porcentaje de aumento (sin %): ")
                 )
                 fechaActual = datetime.now()
                 libreria.actualizarPrecios(fechaActual, porcentajeDeAumento)
 
             elif nro == 8:
-                fecha = input("ingrese fecha (AÑO-MES-DIA)")
+                fecha = input("Ingrese la Fecha con el siguiente formato (AÑO-MES-DÍA): ")
                 libreria.mostrarRegistro(fecha)
 
             elif nro == 99:
@@ -142,7 +145,7 @@ class ProgramaPrincipal:
                 print("Opción inválida. Por favor ingrese un número válido.")
 
     def crearTablas(self):
-        print("entro al crear tabla")
+        print("Creando tablas...")
         conexion = Conexiones()
         conexion.abrirConexion()
         conexion.miCursor.execute("DROP TABLE IF EXISTS LIBROS")
@@ -200,6 +203,7 @@ class Libreria:
             )
             conexion.miConexion.commit()
             print("Libro agregado exitosamente")
+
         except Exception as err:
             print("Error al agregar un libro")
             print(err)
@@ -239,7 +243,7 @@ class Libreria:
             conexion.miConexion.commit()
             print("Libro borrado correctamente")
         except Exception as err:
-            print("Error al borrar libro")
+            print("Error al borrar el libro")
             print(err)
         finally:
             conexion.cerrarConexion()
@@ -315,7 +319,7 @@ class Libreria:
             conexion.miCursor.execute(
                 "INSERT INTO HISTORICO_LIBROS (id_libro, ISBN, titulo, autor, genero, precio, fechaUltimoPrecio, cantDisponibles) SELECT id_libro, ISBN, titulo, autor, genero, precio, fechaUltimoPrecio, cantDisponibles FROM LIBROS"
             )
-            print("Libros agregados a la tabla historico exitosamente")
+            print("Libros agregados a la tabla histórico exitosamente")
             aumento = float((porcentajeDeAumento / 100) + 1)
             conexion.miCursor.execute(
                 "UPDATE LIBROS SET precio = precio*?, fechaUltimoPrecio = ?",
@@ -324,7 +328,7 @@ class Libreria:
 
             conexion.miConexion.commit()
         except Exception as err:
-            print("Error al agregar a historicos")
+            print("Error al agregar a históricos")
             print(err)
         finally:
             conexion.cerrarConexion()
