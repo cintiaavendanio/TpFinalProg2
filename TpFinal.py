@@ -66,7 +66,9 @@ class ProgramaPrincipal:
 
                 while bandera == True:
                     try:
-                        rta = input("¿Está seguro de que desea modificar el precio del libro? (S/N): ")
+                        rta = input(
+                            "¿Está seguro de que desea modificar el precio del libro? (S/N): "
+                        )
                         if rta.lower() == "s":
                             libreria.modificar_libro(id, nuevo_precio)
 
@@ -78,7 +80,7 @@ class ProgramaPrincipal:
                         else:
                             print("No ingresó una opción valida")
                             bandera = True
-                            
+
                     except Exception as err:
                         print("Error al modificar el libro")
                         print(err)
@@ -89,7 +91,9 @@ class ProgramaPrincipal:
 
                 while bandera == True:
                     try:
-                        rta = input("¿Está seguro de que desea eliminar el libro? (S/N): ")
+                        rta = input(
+                            "¿Está seguro de que desea eliminar el libro? (S/N): "
+                        )
                         if rta.lower() == "s":
                             libreria.borrar_libro(id)
                             bandera = False
@@ -99,11 +103,10 @@ class ProgramaPrincipal:
                         else:
                             print("No ingresó una opción valida")
                             bandera = True
-                            
+
                     except Exception as err:
                         print("Error al eliminar el libro")
                         print(err)
-
 
             elif nro == 4:
                 id = input("Por favor ingrese el id del libro: ")
@@ -333,8 +336,11 @@ class Libreria:
         conexion = Conexiones()
         conexion.abrirConexion()
         try:
-            registros = conexion.miCursor.execute("SELECT id_libro, ISBN, titulo, fechaUltimoPrecio FROM LIBROS WHERE fechaUltimoPrecio < ?", (fecha,))
-            
+            registros = conexion.miCursor.execute(
+                "SELECT id_libro, ISBN, titulo, fechaUltimoPrecio FROM LIBROS WHERE fechaUltimoPrecio < ?",
+                (fecha,),
+            )
+
             if registros:
                 print("Registros anteriores a la fecha límite:")
                 for registro in registros:
@@ -353,7 +359,7 @@ class Libreria:
         finally:
             conexion.cerrarConexion()
 
-#Libreria y ProgramaPrincipal son clases con metodos. Creamos los objetos para acceder a estos metodos
+
 libreria = Libreria()
 programa = ProgramaPrincipal()
 programa.menu()
