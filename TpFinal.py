@@ -28,7 +28,7 @@ class ProgramaPrincipal:
             print("8 - Mostrar registro")
             print("99 - Crear tablas")
             print("0- Salir del menú")
-            
+
             try:
                 nro = int(input("Por favor ingrese la opción mediante su número: "))
                 print("")
@@ -45,7 +45,9 @@ class ProgramaPrincipal:
                     precio = float(input("Por favor, ingrese el precio del libro: "))
                     fechaUltimoPrecio = datetime.now()
                     cantDisponibles = int(
-                        input("Por favor, ingrese la cantidad de unidades disponibles: ")
+                        input(
+                            "Por favor, ingrese la cantidad de unidades disponibles: "
+                        )
                     )
 
                     libreria.agregar_libro(
@@ -63,9 +65,13 @@ class ProgramaPrincipal:
                     print(err)
 
             elif nro == 2:
-                id = input("Por favor, ingrese el ID del libro: ")
-                nuevo_precio = input("Por favor, ingrese el nuevo precio: ")
-                bandera = True
+                try:
+                    id = int(input("Por favor, ingrese el ID del libro: "))
+                    nuevo_precio = input("Por favor, ingrese el nuevo precio: ")
+                    bandera = True
+                except Exception as err:
+                    print("no ingreso opciones validas")
+                    print(err)
 
                 while bandera == True:
                     try:
@@ -89,9 +95,13 @@ class ProgramaPrincipal:
                         print(err)
 
             elif nro == 3:
-                id = input("Por favor, ingrese el ID del libro: ")
-                bandera = True
+                try:
+                    id = int(input("Por favor, ingrese el ID del libro: "))
+                except Exception as err:
+                    print("no ingreso un id valido")
+                    print(err)
 
+                bandera = True
                 while bandera == True:
                     try:
                         rta = input(
@@ -112,11 +122,15 @@ class ProgramaPrincipal:
                         print(err)
 
             elif nro == 4:
-                id = input("Por favor, ingrese el ID del libro: ")
-                nueva_disponibilidad = input(
-                    "Por favor, ingrese la nueva disponibilidad: "
-                )
-                libreria.modificar_disponibilidad(id, nueva_disponibilidad)
+                try:
+                    id = int(input("Por favor, ingrese el ID del libro: "))
+                    nueva_disponibilidad = int(
+                        input("Por favor, ingrese la nueva disponibilidad: ")
+                    )
+                    libreria.modificar_disponibilidad(id, nueva_disponibilidad)
+                except Exception as err:
+                    print("Error al modificar el libro")
+                    print(err)
 
             elif nro == 5:
                 libreria.mostrar_libros()
@@ -136,7 +150,9 @@ class ProgramaPrincipal:
                 libreria.actualizarPrecios(fechaActual, porcentajeDeAumento)
 
             elif nro == 8:
-                fecha = input("Ingrese la Fecha con el siguiente formato (AÑO-MES-DÍA): ")
+                fecha = input(
+                    "Ingrese la Fecha con el siguiente formato (AÑO-MES-DÍA): "
+                )
                 libreria.mostrarRegistro(fecha)
 
             elif nro == 99:
@@ -309,6 +325,7 @@ class Libreria:
             print("Venta agregada exitosamente")
 
             conexion.miConexion.commit()
+
         except Exception as err:
             print("Error al agregar la venta")
             print(err)
