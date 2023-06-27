@@ -150,15 +150,23 @@ class ProgramaPrincipal:
                 libreria.actualizarPrecios(fechaActual, porcentajeDeAumento)
 
             elif nro == 8:
-                fecha = input(
-                    "Ingrese la Fecha con el siguiente formato (AÑO-MES-DÍA): "
-                )
-                libreria.mostrarRegistro(fecha)
+                bandera = True
+                while bandera == True:
+                    fecha = input("Ingrese la Fecha con el siguiente formato (AAAA-MM-DD): ")
+                    try:
+                        fecha = datetime.strptime(fecha, "%Y-%m-%d")
+                        libreria.mostrarRegistro(fecha)
+                        bandera = False
+                    except ValueError:
+                        print("Formato de fecha inválido. Asegúrese de ingresar la fecha en el formato correcto (AAAA-MM-DD).\n")
 
             elif nro == 99:
                 self.crearTablas()
 
             elif nro == 0:
+                print("-"*86)
+                print("Desarrollado con ♥️ por Cintia Avendaño, Mateo Bernardi, Luisina Novo y Joaquín Rodriguez. ")
+                print("-"*86)
                 break
             else:
                 print("Opción inválida. Por favor ingrese un número válido.")
@@ -302,32 +310,40 @@ class Libreria:
             conexion.cerrarConexion()
 
     def registrar_venta(self, id_libro, cantVendidas, fecha):
+
         conexion = Conexiones()
         conexion.abrirConexion()
         try:
-            conexion.miCursor.execute(
-                "INSERT INTO VENTAS (id_libro, cantVendida,fecha) VALUES (?, ?, ?)",
-                (id_libro, cantVendidas, fecha),
-            )
-
+            # Obtener la cantidad disponible de libros del libro actual
             cursor = conexion.miCursor.execute(
                 "SELECT cantDisponibles FROM LIBROS WHERE id_libro = ?",
                 (id_libro),
             )
             for fila in cursor:
-                cantDisponibles = fila[0] - int(cantVendidas)
+                 cantDisponibles = fila[0]
 
-            conexion.miCursor.execute(
-                "UPDATE LIBROS SET cantDisponibles = ? WHERE id_libro = ?",
-                (cantDisponibles, id_libro),
-            )
+            # Verificar si hay suficientes libros disponibles
+            if cantDisponibles >= int(cantVendidas):
+                # Insertar la venta en la tabla de ventas
+                conexion.miCursor.execute(
+                    "INSERT INTO VENTAS (id_libro, cantVendida,fecha) VALUES (?, ?, ?)",
+                    (id_libro, cantVendidas, fecha),
+                )
 
-            print("Venta agregada exitosamente")
+                # Actualizar la cantidad disponible de libros
+                cantDisponibles -= int(cantVendidas)
+                conexion.miCursor.execute(
+                    "UPDATE LIBROS SET cantDisponibles = ? WHERE id_libro = ?",
+                    (cantDisponibles, id_libro),
+                )
 
-            conexion.miConexion.commit()
+                conexion.miConexion.commit()
+                print("Venta agregada exitosamente")
+            else:
+                print("Lo siento, no hay suficientes libros disponibles para esta venta")
 
         except Exception as err:
-            print("Error al agregar la venta")
+            print("Error al agregar la venta amigoooo")
             print(err)
         finally:
             conexion.cerrarConexion()
